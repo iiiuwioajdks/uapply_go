@@ -1,0 +1,23 @@
+app:
+  port: "9090"
+
+mysql:
+  host: "121.40.193.220"
+  port: 3307
+  user: "root"
+  password: "root"
+  dbname: "uapply"
+
+redis:
+  host: "121.40.193.220"
+  port: 6379
+  db: 4
+  auth: "lmx15521144359"
+
+log:
+  level: "debug"
+  filename: "uapply_go.log"
+  max_size: 200
+  max_age: 30
+  max_backups: 7
+  mode: "release"

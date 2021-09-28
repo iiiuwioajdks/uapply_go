@@ -19,13 +19,6 @@ func main() {
 	// 配置路由
 	r := router.SetRouter()
 
-	Init()
-
-	port := viper.GetString("app.port")
-	r.Run(":" + port)
-}
-
-func Init() {
 	// 配置信息
 	err := setting.Init()
 	if err != nil {
@@ -58,4 +51,7 @@ func Init() {
 		zap.L().Error("redis init error", zap.Error(err))
 	}
 	defer redis.Close()
+
+	port := viper.GetString("app.port")
+	r.Run(":" + port)
 }

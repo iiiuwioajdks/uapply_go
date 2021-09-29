@@ -7,7 +7,6 @@ import (
 	"go.uber.org/zap"
 	"log"
 	"net/http"
-	"time"
 	"uapply_go/entity/ResponseModels"
 	"uapply_go/logic/departmentLogic"
 	"uapply_go/response"
@@ -27,17 +26,16 @@ import (
 // @Fail
 // @Router /login [post]
 func Login(c *gin.Context) {
-	t := time.Now()
 	var lm ResponseModels.LoginMessage
 	err := c.ShouldBindJSON(&lm)
-	// 如果参数不合法
+	// if params invalid
 	if err != nil {
 		zap.L().Error("invalid params for login", zap.Error(err))
 		log.Printf("%+v \n", err)
 		response.Fail(c, http.StatusBadRequest, response.CodeParamsInvalid)
 		return
 	}
-	// 如果参数合法，就传到 logic 层处理
+	// if params valid,go to logic
 	token, err := departmentLogic.Login(&lm)
 	if err != nil {
 		zap.L().Error("login error", zap.Error(err))
@@ -49,7 +47,5 @@ func Login(c *gin.Context) {
 		response.Fail(c, http.StatusInternalServerError, response.CodeSystemBusy)
 		return
 	}
-	since := time.Since(t)
-	log.Println("耗时：", since)
 	response.Success(c, token)
 }

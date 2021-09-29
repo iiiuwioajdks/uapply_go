@@ -14,6 +14,8 @@ func Login(lm *ResponseModels.LoginMessage) (di *DBModels.DepartmentInfo, err er
 	di = &DBModels.DepartmentInfo{}
 	err = db.Get(di, sqlStr, lm.Account, lm.Password)
 	if err != nil {
+		// 这个一定特判
+		// 这里不用wrap 是因为wrap之后没法用 is 特判
 		if errors.Is(sql.ErrNoRows, err) {
 			return nil, err
 		}

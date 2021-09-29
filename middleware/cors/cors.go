@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// Cors 设置跨域
+// Cors Set up cross-domain
 func Cors() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		method := c.Request.Method
@@ -16,11 +16,11 @@ func Cors() gin.HandlerFunc {
 		c.Header("Access-Control-Expose-Headers", "Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Content-Type")
 		c.Header("Access-Control-Allow-Credentials", "true")
 
-		//放行所有OPTIONS方法
+		// Release all OPTIONS methods
 		if method == "OPTIONS" {
 			c.AbortWithStatus(http.StatusNoContent)
 		}
-		// 处理请求
+		// handle the requests
 		c.Next()
 	}
 }

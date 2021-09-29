@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// Success 封装成功的返回码
+// Success Encapsulated the successful return code
 func Success(c *gin.Context, data interface{}) {
 	c.JSON(http.StatusOK, gin.H{
 		"code": CodeSuccess,
@@ -14,7 +14,7 @@ func Success(c *gin.Context, data interface{}) {
 	})
 }
 
-// Fail 普通失败返回
+// Fail Normal failure returns
 func Fail(c *gin.Context, status int, code ResCode) {
 	c.JSON(status, gin.H{
 		"code": code,
@@ -22,7 +22,8 @@ func Fail(c *gin.Context, status int, code ResCode) {
 	})
 }
 
-// FailWithMsg 带着错误信息返回，注意这里的 code 不能是 ResCode类型，也就是不能在code里面定义
+// FailWithMsg Return with an error message,
+// note that the code here cannot be a ResCode type, that is, it cannot be defined in code
 func FailWithMsg(c *gin.Context, status int, code int64, msg interface{}) {
 	c.JSON(http.StatusOK, gin.H{
 		"code": code,

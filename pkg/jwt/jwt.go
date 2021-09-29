@@ -6,27 +6,27 @@ import (
 	"time"
 )
 
-// TokenExpireDuration 过期时间 7 天
+// TokenExpireDuration Expiration time 7 days
 const TokenExpireDuration = time.Hour * 24 * 7
 
-// 设置签名密钥
+// Set the signature key
 var mySercet = []byte("qygzs uapply_go version1")
 
 type MyClaims struct {
-	// 自定义
+	// Customization
 	DepartmentID   int64  `json:"department_id"`
 	OrganizationID int64  `json:"organization_id"`
 	DepartmentName string `json:"department_name"`
-	// 标准字段
+	// Standard field
 	jwt.StandardClaims
 }
 
-// GenToken 生成JWT
+// GenToken Build JWT
 func GenToken(organizationID, departmentID int64, departmentName string) (string, error) {
-	// 创建一个我们自己的声明
+	// Create our own statement
 	c := MyClaims{
 		departmentID,
-		// 自定义字段
+		// Customization
 		organizationID,
 		departmentName,
 		jwt.StandardClaims{
@@ -34,15 +34,15 @@ func GenToken(organizationID, departmentID int64, departmentName string) (string
 			Issuer:    "uapply_go",                                // 签发人
 		},
 	}
-	// 使用指定的签名方法创建签名对象
+	// Create a signature object using the SigningMethodHS256 signature method
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, c)
-	// 使用指定的secret签名并获得完整的编码后的字符串token
+	// Use the specified seek signature and get the fully encoded token
 	return token.SignedString(mySercet)
 }
 
-// ParseToken 解析JWT
+// ParseToken parse JWT
 func ParseToken(tokenString string) (*MyClaims, error) {
-	// 解析token
+	// parse token
 	var mc = new(MyClaims)
 	token, err := jwt.ParseWithClaims(tokenString, mc, func(token *jwt.Token) (i interface{}, err error) {
 		return mySercet, nil
@@ -50,7 +50,7 @@ func ParseToken(tokenString string) (*MyClaims, error) {
 	if err != nil {
 		return nil, err
 	}
-	if token.Valid { // 校验token
+	if token.Valid {
 		return mc, nil
 	}
 	return nil, errors.New("invalid token")

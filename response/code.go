@@ -2,7 +2,7 @@ package response
 
 type ResCode int64
 
-// CodeSuccess 每在这里枚举一个，就需要在codeMsgMap里面添加错误信息
+// CodeSuccess For each enumeration here, you need to add an error message to codeMsgMap
 const (
 	CodeSuccess ResCode = 1000 + iota
 	CodeParamsInvalid
@@ -11,10 +11,10 @@ const (
 )
 
 var codeMsgMap = map[ResCode]string{
-	CodeSuccess:       "success",
-	CodeParamsInvalid: "invalid params",
-	CodeParamsFalse:   "账号或密码错误",
-	CodeSystemBusy:    "系统繁忙",
+	CodeSuccess:       "Success",
+	CodeParamsInvalid: "Invalid params",
+	CodeParamsFalse:   "The account number or password is incorrect",
+	CodeSystemBusy:    "The system is busy",
 }
 
 func (c ResCode) Msg() string {

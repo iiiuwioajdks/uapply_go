@@ -7,7 +7,7 @@ import (
 )
 
 func Login(lm *ResponseModels.LoginMessage) (token string, err error) {
-	// 去数据库拿取信息
+	// Go to the database to get the information
 	login, err := mysql.Login(lm)
 	// 出错了就直接return
 	if err != nil {

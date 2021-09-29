@@ -7,6 +7,7 @@ import (
 	"uapply_go/controller/testController"
 	_ "uapply_go/docs"
 	"uapply_go/logger"
+	"uapply_go/middleware/auth"
 	"uapply_go/middleware/cors"
 
 	gs "github.com/swaggo/gin-swagger"
@@ -31,8 +32,12 @@ func SetRouter() *gin.Engine {
 	r.POST(baseUrl+"/login", departmentController.Login)
 	// 组织注册，需要管理员权限
 	admin := r.Group(baseUrl + "/admin")
+	admin.Use(auth.JWTAuthMiddleware())
 	{
-		admin.POST("/organizations", adminController.Organizations)
+		// 查看组织
+		admin.GET("/organizations", adminController.Organizations)
+		// 创建组织
+		admin.POST("/organization", adminController.Organization)
 	}
 
 	return r

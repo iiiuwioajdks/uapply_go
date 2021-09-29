@@ -20,4 +20,4 @@ log:
   max_size: 200
   max_age: 30
   max_backups: 7
-  mode: "release"
+  mode: "dev"

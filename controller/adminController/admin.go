@@ -48,18 +48,15 @@ func Organizations(c *gin.Context) {
 			response.Fail(c, http.StatusInternalServerError, response.CodeSystemBusy)
 			return
 		}
-		// json 序列化对象为 []byte
-		marshal, err := json.Marshal(os)
-		if err != nil {
-			log.Println(err)
-		}
-		str := string(marshal[:])
-		err = adminLogic.OrganizationsRedisSet(str)
-		if err != nil {
-			zap.L().Error("redis set error", zap.Error(err))
-			log.Printf("%+v \n", err)
-		}
+		go func() {
+			// json 序列化对象为 []byte
+			marshal, err := json.Marshal(os)
+			if err != nil {
+				log.Println(err)
+			}
+			str := string(marshal[:])
+			adminLogic.OrganizationsRedisSet(str)
+		}()
 	}
-
 	response.Success(c, os)
 }

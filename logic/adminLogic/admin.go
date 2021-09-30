@@ -18,6 +18,6 @@ func OrganizationsRedisGet() (string, bool) {
 	return get, true
 }
 
-func OrganizationsRedisSet(data string) error {
-	return redis.OrganizationsRedisSet(data)
+func OrganizationsRedisSet(data string) {
+	redis.OrganizationsRedisSet(data)
 }

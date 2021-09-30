@@ -2,12 +2,10 @@ package redis
 
 import (
 	"context"
-	"github.com/pkg/errors"
 )
 
-func OrganizationsRedisSet(data string) error {
-	_, err := rdb.Set(context.Background(), KeyOrganizations, data, -1).Result()
-	return errors.Wrap(err, "redis set error")
+func OrganizationsRedisSet(data string) {
+	rdb.Set(context.Background(), KeyOrganizations, data, -1).Result()
 }
 
 func OrganizationsRedisGet() (result string, err error) {

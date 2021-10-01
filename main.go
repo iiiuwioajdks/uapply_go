@@ -4,6 +4,7 @@ import (
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 	"log"
+	"uapply_go/dao/memcache"
 	"uapply_go/dao/mysql"
 	"uapply_go/dao/redis"
 	"uapply_go/logger"
@@ -51,6 +52,13 @@ func main() {
 		zap.L().Error("redis init error", zap.Error(err))
 	}
 	defer redis.Close()
+
+	// memcache
+	mc := memcache.Init()
+	if mc == nil {
+		log.Printf("memcache 连接失败")
+		zap.L().Error("memcache 连接失败")
+	}
 
 	port := viper.GetString("app.port")
 	r.Run(":" + port)

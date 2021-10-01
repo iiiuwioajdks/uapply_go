@@ -14,6 +14,12 @@ import (
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 )
 
+/*
+使用了缓存的地方：
+redis：
+	adminController.Organizations // 查看组织（新增组织或者减少组织的时候记得改缓存）
+	departmentController.Login // 部门登录 （部门改账号密码的时候记得删缓存）
+*/
 const (
 	baseUrl = "/api/uapply"
 )

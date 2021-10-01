@@ -16,7 +16,7 @@ func Login(lm *ResponseModels.LoginMessage) (token string, err error) {
 	} else {
 		// Go to the database to get the information
 		login, err = mysql.Login(lm)
-		redis.SetDepLogin(lm, login)
+		go redis.SetDepLogin(lm, login)
 		// 出错了就直接return
 		if err != nil {
 			return "", err

@@ -25,7 +25,7 @@ func SetDepLogin(lm *ResponseModels.LoginMessage, login *DBModels.DepartmentInfo
 
 func CheckDepLogin(lm *ResponseModels.LoginMessage) ([]byte, bool) {
 	val := rdb.LRange(context.Background(), key+lm.Account, 0, -1).Val()
-	if val[1] == lm.Password {
+	if len(val) >= 2 && val[1] == lm.Password {
 		return []byte(val[0]), true
 	}
 	return nil, false

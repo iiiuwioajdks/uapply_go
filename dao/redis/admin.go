@@ -13,7 +13,7 @@ func OrganizationsRedisGet() (result string, err error) {
 	return
 }
 
-func ClearOrgCache() error {
-	_, err := rdb.Del(context.Background(), KeyOrganizations).Result()
-	return err
+func ClearOrgCache() (err error) {
+	_, err = rdb.Del(context.Background(), KeyOrganizations).Result()
+	return
 }

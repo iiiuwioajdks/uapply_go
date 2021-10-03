@@ -2,20 +2,20 @@ app:
   port: "9090"
 
 mysql:
-  host: ""
+  host: "121.40.193.220"
   port: 3307
   user: "root"
   password: "root"
   dbname: "uapply"
 
 redis:
-  host: ""
+  host: "121.40.193.220"
   port: 6379
   db: 4
   auth: "lmx15521144359"
 
 memecache:
-  host: ""
+  host: "121.40.193.220"
   port: 11212
 
 log:

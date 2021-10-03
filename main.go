@@ -59,7 +59,8 @@ func main() {
 		log.Printf("memcache 连接失败")
 		zap.L().Error("memcache 连接失败")
 	}
-
+	// pprof性能调优
+	//pprof.Register(r)
 	port := viper.GetString("app.port")
 	r.Run(":" + port)
 }

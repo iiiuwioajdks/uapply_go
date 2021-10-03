@@ -14,17 +14,57 @@ import (
 
 // todo:每次关于 organizations的信息有变更时都要删除redis的对应缓存，因为存对象信息了
 
-// Organization 组织注册
-func Organization(c *gin.Context) {
+func Department(c *gin.Context) {
+	// 绑定前端数据
+	var dep DBModels.Department
 
+	// logic处理
+	adminLogic.DepartmentCreate(&dep)
+}
+
+// Organization 组织注册
+// @Summary 组织注册
+// @Tags admin
+// @Accept application/json（接受数据类型）
+// @Produce application/json （返回数据类型）
+// @Security ApiKeyAuth
+// @Success 200
+// @Failure 500
+// @Router /admin/organization [post]
+func Organization(c *gin.Context) {
+	ok := adminCheck(c)
+	if !ok {
+		return
+	}
+
+	var org DBModels.Organization
+	err := c.ShouldBindJSON(&org)
+	if err != nil {
+		log.Println(err)
+	}
+
+	err = adminLogic.OrganizationCreate(&org)
+	if err != nil {
+		zap.L().Error("create organization error:", zap.Error(err))
+		log.Printf("%+v", err)
+		response.Fail(c, http.StatusInternalServerError, response.CodeSystemBusy)
+		return
+	}
+	response.Success(c, nil)
 }
 
 // Organizations 查看组织，列出所有组织以及组织之下的社团，根据organization_id
+// @Summary 查看组织
+// @Tags admin
+// @Accept application/json（接受数据类型）
+// @Produce application/json （返回数据类型）
+// @Security ApiKeyAuth
+// @Success 200 {object} _Organizations
+// @Failure 500
+// @Router /admin/organizations [get]
 func Organizations(c *gin.Context) {
-	id, ok := c.Get(auth.OrganizationIdKey)
-	if !ok || id.(int64) != 1 {
-		// 401授权失败
-		response.Fail(c, http.StatusUnauthorized, response.CodeNotRoot)
+	ok := adminCheck(c)
+	if !ok {
 		return
 	}
 	var os []*DBModels.Organizations
@@ -59,4 +99,14 @@ func Organizations(c *gin.Context) {
 		}()
 	}
 	response.Success(c, os)
+}
+
+func adminCheck(c *gin.Context) bool {
+	id, ok := c.Get(auth.OrganizationIdKey)
+	if !ok || id.(int64) != 1 {
+		// 401授权失败
+		response.Fail(c, http.StatusUnauthorized, response.CodeNotRoot)
+		return false
+	}
+	return ok
 }

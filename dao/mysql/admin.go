@@ -20,3 +20,9 @@ func Organizations(os []*DBModels.Organizations) ([]*DBModels.Organizations, err
 	}
 	return os, nil
 }
+
+func Organization(org *DBModels.Organization) error {
+	sqlStr := "insert into organization(organization_name) values (?)"
+	_, err := db.Exec(sqlStr, org.OrganizationName)
+	return errors.Wrap(err, "db.Exec(sqlStr, org.OrganizationName) error")
+}

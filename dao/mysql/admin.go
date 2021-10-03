@@ -1,6 +1,7 @@
 package mysql
 
 import (
+	"github.com/jmoiron/sqlx"
 	"github.com/pkg/errors"
 	"uapply_go/entity/DBModels"
 )
@@ -11,11 +12,31 @@ func Organizations(os []*DBModels.Organizations) ([]*DBModels.Organizations, err
 	if err != nil {
 		return nil, errors.Wrap(err, "db.Select(&os, sqlStr) error")
 	}
-	sqlStr = `select department_id,department_name from department where organization_id=?`
+	sqlStr = `select department_id,department_name,organization_id from department 
+			  where organization_id IN (?)`
+	var ids []int
 	for i := range os {
-		err := db.Select(&os[i].Departments, sqlStr, os[i].OrganizationID)
-		if err != nil {
-			return nil, errors.Wrap(err, "select error")
+		ids = append(ids, os[i].OrganizationID)
+	}
+	query, args, err := sqlx.In(sqlStr, ids)
+	if err != nil {
+		return nil, errors.Wrap(err, "db.Select(&os, sqlStr) error")
+	}
+	query = db.Rebind(query)
+	var deps []*DBModels.DepOfOrg
+	err = db.Select(&deps, query, args...)
+	if err != nil {
+		return nil, errors.Wrap(err, "db.Select(&deps, query, args...) error")
+	}
+	for i := range os {
+		for j := range deps {
+			if deps[j].OrganizationID == os[i].OrganizationID {
+				temp := &DBModels.DepOfOrg2{
+					DepartmentID:   deps[j].DepartmentID,
+					DepartmentName: deps[j].DepartmentName,
+				}
+				os[i].Departments = append(os[i].Departments, temp)
+			}
 		}
 	}
 	return os, nil

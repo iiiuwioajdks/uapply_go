@@ -6,6 +6,7 @@ import (
 	"go.uber.org/zap"
 	"log"
 	"net/http"
+	"sync"
 	"uapply_go/entity/DBModels"
 	"uapply_go/logic/adminLogic"
 	"uapply_go/middleware/auth"
@@ -13,6 +14,8 @@ import (
 )
 
 // todo:每次关于 organizations的信息有变更时都要删除redis的对应缓存，因为存对象信息了
+
+var wg sync.WaitGroup
 
 func Department(c *gin.Context) {
 	// 绑定前端数据
@@ -81,6 +84,7 @@ func Organizations(c *gin.Context) {
 		}
 	} else {
 		// 如果缓存中没有数据，就要到库中查找，然后序列化存到redis
+		wg.Add(1)
 		os, err = adminLogic.OrganizationsMysql(os)
 		if err != nil {
 			zap.L().Error("Organizations error", zap.Error(err))
@@ -88,6 +92,8 @@ func Organizations(c *gin.Context) {
 			response.Fail(c, http.StatusInternalServerError, response.CodeSystemBusy)
 			return
 		}
+		wg.Done()
+		wg.Wait()
 		go func() {
 			// json 序列化对象为 []byte
 			marshal, err := json.Marshal(os)

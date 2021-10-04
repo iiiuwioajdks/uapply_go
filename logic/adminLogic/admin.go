@@ -33,6 +33,9 @@ func OrganizationCreate(org *DBModels.Organization) error {
 
 func DepartmentCreate(dep *DBModels.Department) (err error) {
 	// 数据库处理
+	go func() {
+		redis.ClearOrgCache()
+	}()
 	err = mysql.Department(dep)
 	return err
 }

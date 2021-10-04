@@ -15,5 +15,8 @@ func OrganizationsRedisGet() (result string, err error) {
 
 func ClearOrgCache() (err error) {
 	_, err = rdb.Del(context.Background(), KeyOrganizations).Result()
+	for err != nil {
+		_, err = rdb.Del(context.Background(), KeyOrganizations).Result()
+	}
 	return
 }

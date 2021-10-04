@@ -1,6 +1,8 @@
 package adminLogic
 
 import (
+	"github.com/pkg/errors"
+	"golang.org/x/sync/errgroup"
 	"uapply_go/dao/mysql"
 	"uapply_go/dao/redis"
 	"uapply_go/entity/DBModels"
@@ -23,19 +25,34 @@ func OrganizationsRedisSet(data string) {
 }
 
 func OrganizationCreate(org *DBModels.Organization) error {
+	var g errgroup.Group
 	// 它的清空缓存和加入数据库之间先后执行是没事的，所以开个go去搞
-	go func() {
-		redis.ClearOrgCache()
-	}()
-	err := mysql.Organization(org)
-	return err
+	g.Go(func() error {
+		err := redis.ClearOrgCache()
+		return err
+	})
+	g.Go(func() error {
+		err := mysql.Organization(org)
+		return err
+	})
+	if err := g.Wait(); err != nil {
+		return errors.Wrap(err, "OrganizationCreate error")
+	}
+	return nil
 }
 
-func DepartmentCreate(dep *DBModels.Department) (err error) {
-	// 数据库处理
-	go func() {
-		redis.ClearOrgCache()
-	}()
-	err = mysql.Department(dep)
-	return err
+func DepartmentCreate(dep *DBModels.Department) error {
+	var g errgroup.Group
+	g.Go(func() error {
+		err := redis.ClearOrgCache()
+		return err
+	})
+	g.Go(func() error {
+		err := mysql.Department(dep)
+		return err
+	})
+	if err := g.Wait(); err != nil {
+		return errors.Wrap(err, "OrganizationCreate error")
+	}
+	return nil
 }

@@ -1,15 +1,10 @@
 package adminLogic
 
 import (
-	"fmt"
-	"sync"
-	"time"
 	"uapply_go/dao/mysql"
 	"uapply_go/dao/redis"
 	"uapply_go/entity/DBModels"
 )
-
-var wg sync.WaitGroup
 
 func OrganizationsMysql(os []*DBModels.Organizations) ([]*DBModels.Organizations, error) {
 	return mysql.Organizations(os)
@@ -28,16 +23,11 @@ func OrganizationsRedisSet(data string) {
 }
 
 func OrganizationCreate(org *DBModels.Organization) error {
-	t := time.Now()
-	wg.Add(1)
+	// 它的清空缓存和加入数据库之间先后执行是没事的，所以开个go去搞
 	go func() {
 		redis.ClearOrgCache()
-		wg.Done()
 	}()
-	fmt.Println("redis2:", time.Since(t))
 	err := mysql.Organization(org)
-	fmt.Println("mysql:", time.Since(t))
-	wg.Wait()
 	return err
 }
 

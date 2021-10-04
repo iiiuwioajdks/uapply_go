@@ -26,6 +26,7 @@ import (
 // @Fail
 // @Router /login [post]
 func Login(c *gin.Context) {
+
 	var lm ResponseModels.LoginMessage
 	err := c.ShouldBindJSON(&lm)
 	// if params invalid

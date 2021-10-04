@@ -5,6 +5,7 @@ import (
 	"uapply_go/controller/adminController"
 	"uapply_go/controller/departmentController"
 	"uapply_go/controller/testController"
+	"uapply_go/controller/wxController"
 	_ "uapply_go/docs"
 	"uapply_go/logger"
 	"uapply_go/middleware/auth"
@@ -28,6 +29,7 @@ func SetRouter() *gin.Engine {
 	r := gin.New()
 	r.Use(logger.GinLogger(), logger.GinRecovery(true), cors.Cors()) // 跨域等等
 
+	// 测试及文档
 	test := r.Group("/api/uapply")
 	{
 		test.GET("/ping", testController.Pong) // 测试
@@ -36,7 +38,7 @@ func SetRouter() *gin.Engine {
 	}
 	// 部门登录
 	r.POST(baseUrl+"/login", departmentController.Login)
-	// 组织注册，需要管理员权限
+	// 管理员选项
 	admin := r.Group(baseUrl + "/admin")
 	admin.Use(auth.JWTAuthMiddleware())
 	{
@@ -46,6 +48,12 @@ func SetRouter() *gin.Engine {
 		admin.POST("/organization", adminController.Organization)
 		// 创建社团
 		admin.POST("/department", adminController.Department)
+	}
+	// 微信小程序选项
+	wx := r.Group(baseUrl + "/wx1")
+	{
+		// 小程序登录
+		wx.GET("/login", wxController.Login1)
 	}
 
 	return r

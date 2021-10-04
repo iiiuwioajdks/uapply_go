@@ -44,6 +44,8 @@ func SetRouter() *gin.Engine {
 		admin.GET("/organizations", adminController.Organizations)
 		// 创建组织
 		admin.POST("/organization", adminController.Organization)
+		// 创建社团
+		admin.POST("/department", adminController.Department)
 	}
 
 	return r

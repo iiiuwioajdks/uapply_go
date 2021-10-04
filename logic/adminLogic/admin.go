@@ -1,6 +1,7 @@
 package adminLogic
 
 import (
+	"context"
 	"github.com/pkg/errors"
 	"golang.org/x/sync/errgroup"
 	"uapply_go/dao/mysql"
@@ -26,7 +27,7 @@ func OrganizationsRedisSet(data string) {
 
 func OrganizationCreate(org *DBModels.Organization) error {
 	// 错误组来获取goroutine并发的错误
-	var g errgroup.Group
+	g, _ := errgroup.WithContext(context.Background())
 	// 它的清空缓存和加入数据库之间先后执行是没事的，所以开个go去搞
 	g.Go(func() error {
 		err := redis.ClearOrgCache()
@@ -43,7 +44,7 @@ func OrganizationCreate(org *DBModels.Organization) error {
 }
 
 func DepartmentCreate(dep *DBModels.Department) error {
-	var g errgroup.Group
+	g, _ := errgroup.WithContext(context.Background())
 	g.Go(func() error {
 		err := redis.ClearOrgCache()
 		return err

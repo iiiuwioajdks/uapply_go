@@ -24,8 +24,8 @@ type Organization struct {
 
 // Department 社团注册模型
 type Department struct {
-	DepartmentName string `json:"department_name" db:"department_name"`
-	Account        string `json:"account" db:"account"`
-	Password       string `json:"password" db:"password"`
-	OrganizationID int    `json:"organization_id" db:"organization_id"`
+	DepartmentName string `json:"department_name" db:"department_name" binding:"required"`
+	Account        string `json:"account" db:"account" binding:"required"`
+	Password       string `json:"password" db:"password" binding:"required"`
+	OrganizationID int    `json:"organization_id" db:"organization_id" binding:"required"`
 }

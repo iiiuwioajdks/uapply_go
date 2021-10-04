@@ -17,6 +17,7 @@ import (
 
 var wg sync.WaitGroup
 
+// Department 社团注册
 func Department(c *gin.Context) {
 	// 绑定前端数据
 	var dep DBModels.Department

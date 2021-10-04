@@ -13,6 +13,16 @@ import (
  这个是报名者的小程序
 */
 
+// Login1 微信小程序1登录
+// @Summary 微信小程序1登录
+// @Tags wxapp1
+// @Accept application/json（接受数据类型）
+// @Produce application/json （返回数据类型）
+// @Security ApiKeyAuth
+// @Success 200 {object} _Wx1Token
+// @Param code query string true "wx.login 给的 code"
+// @Failure 500
+// @Router /wx1/login [get]
 func Login1(c *gin.Context) {
 	code := c.Query("code")
 	token, err := wxLogic.Wxapp1Login(code)

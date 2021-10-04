@@ -23,6 +23,11 @@ var wg sync.WaitGroup
 // @Accept application/json（接受数据类型）
 // @Produce application/json （返回数据类型）
 // @Security ApiKeyAuth
+// @Param Authorization header string false "Bearer 用户令牌" （token类型）
+// @Param department_name formData  string true "社团名字"
+// @Param account formData  string true "社团账号"
+// @Param password formData  string true "社团密码"
+// @Param organization_id formData  string true "对应的组织的id"
 // @Success 200
 // @Failure 500
 // @Failure 400
@@ -54,6 +59,8 @@ func Department(c *gin.Context) {
 // @Accept application/json（接受数据类型）
 // @Produce application/json （返回数据类型）
 // @Security ApiKeyAuth
+// @Param Authorization header string false "Bearer 用户令牌" （token类型）
+// @Param organization_name formData  string true "组织名字"
 // @Success 200
 // @Failure 500
 // @Failure 400
@@ -90,6 +97,7 @@ func Organization(c *gin.Context) {
 // @Accept application/json（接受数据类型）
 // @Produce application/json （返回数据类型）
 // @Security ApiKeyAuth
+// @Param Authorization header string false "Bearer 用户令牌" （token类型）
 // @Success 200 {object} _Organizations
 // @Failure 500
 // @Router /admin/organizations [get]

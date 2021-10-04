@@ -19,7 +19,7 @@ type DepOfOrg struct {
 }
 
 type Organization struct {
-	OrganizationName string `json:"organization_name" db:"organization_name"`
+	OrganizationName string `json:"organization_name" db:"organization_name" binding:"required"`
 }
 
 // Department 社团注册模型

@@ -41,10 +41,14 @@ func Organization(c *gin.Context) {
 		return
 	}
 
+	// 绑定数据
 	var org DBModels.Organization
 	err := c.ShouldBindJSON(&org)
+	// 参数验证
 	if err != nil {
+		response.Fail(c, http.StatusBadRequest, response.CodeParamsInvalid)
 		log.Println(err)
+		return
 	}
 
 	err = adminLogic.OrganizationCreate(&org)

@@ -33,6 +33,6 @@ func OrganizationCreate(org *DBModels.Organization) error {
 
 func DepartmentCreate(dep *DBModels.Department) (err error) {
 	// 数据库处理
-
+	err = mysql.Department(dep)
 	return err
 }

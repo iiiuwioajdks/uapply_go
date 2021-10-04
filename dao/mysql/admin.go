@@ -50,3 +50,13 @@ func Organization(org *DBModels.Organization) error {
 	}
 	return nil
 }
+
+func Department(dep *DBModels.Department) error {
+	sqlStr := "insert into department(department_name,organization_id,account,password) values (?,?,?,?)"
+	_, err := db.Exec(sqlStr, dep.DepartmentName, dep.OrganizationID, dep.Account, dep.Password)
+	if err != nil {
+		return errors.Wrap(err, `db.Exec(sqlStr, dep.DepartmentName, dep.OrganizationID,
+							dep.Account, dep.Password) error`)
+	}
+	return nil
+}

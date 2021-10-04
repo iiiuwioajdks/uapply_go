@@ -21,9 +21,21 @@ var wg sync.WaitGroup
 func Department(c *gin.Context) {
 	// 绑定前端数据
 	var dep DBModels.Department
-
+	err := c.ShouldBindJSON(&dep)
+	if err != nil {
+		response.Fail(c, http.StatusBadRequest, response.CodeParamsInvalid)
+		log.Println("bind:", err)
+		return
+	}
 	// logic处理
-	adminLogic.DepartmentCreate(&dep)
+	err = adminLogic.DepartmentCreate(&dep)
+	if err != nil {
+		zap.L().Error("create department error:", zap.Error(err))
+		log.Printf("%+v\n", err)
+		response.Fail(c, http.StatusBadRequest, response.CodeSystemBusy)
+		return
+	}
+	response.Success(c, nil)
 }
 
 // Organization 组织注册

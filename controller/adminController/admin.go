@@ -18,6 +18,15 @@ import (
 var wg sync.WaitGroup
 
 // Department 社团注册
+// @Summary 社团注册
+// @Tags admin
+// @Accept application/json（接受数据类型）
+// @Produce application/json （返回数据类型）
+// @Security ApiKeyAuth
+// @Success 200
+// @Failure 500
+// @Failure 400
+// @Router /admin/department [post]
 func Department(c *gin.Context) {
 	// 绑定前端数据
 	var dep DBModels.Department
@@ -32,7 +41,8 @@ func Department(c *gin.Context) {
 	if err != nil {
 		zap.L().Error("create department error:", zap.Error(err))
 		log.Printf("%+v\n", err)
-		response.Fail(c, http.StatusBadRequest, response.CodeSystemBusy)
+		// 后端逻辑出错用 500 错误码
+		response.Fail(c, http.StatusInternalServerError, response.CodeSystemBusy)
 		return
 	}
 	response.Success(c, nil)
@@ -46,6 +56,7 @@ func Department(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Success 200
 // @Failure 500
+// @Failure 400
 // @Router /admin/organization [post]
 func Organization(c *gin.Context) {
 	ok := adminCheck(c)

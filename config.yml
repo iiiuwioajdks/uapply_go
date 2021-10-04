@@ -27,5 +27,5 @@ log:
   mode: "dev"
 
 wx:
-  appID:
-  secret:
+  appID: wx6ab0a31c31778854
+  secret: e4ef19dfb4d4bf65d67be5a406eb1d74

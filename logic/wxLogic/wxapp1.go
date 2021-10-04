@@ -6,11 +6,13 @@ import (
 	"fmt"
 	"github.com/spf13/viper"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"uapply_go/entity/ResponseModels"
+	"uapply_go/pkg/jwt"
 )
 
-func Wxapp1Login(code string) (*ResponseModels.WxSession1, error) {
+func Wxapp1Login(code string) (string, error) {
 	url := "https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code"
 
 	// 合成url, 这里的appId和secret是在微信公众平台上获取的
@@ -22,24 +24,29 @@ func Wxapp1Login(code string) (*ResponseModels.WxSession1, error) {
 
 	request, err := http.NewRequestWithContext(context.Background(), "GET", url, nil)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
 	response, err := client.Do(request)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
 	body, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
-	s := string(body)
 	var ws1 ResponseModels.WxSession1
 	if err := json.Unmarshal(body, &ws1); err != nil {
-		ws1.SessionKey = s
-		return &ws1, err
+		return "", err
 	}
-	return &ws1, nil
+	// todo: delete
+	log.Println("ws1:", ws1)
+
+	token, err := jwt.GenToken2(&ws1)
+	if err != nil {
+		return "", err
+	}
+	return token, nil
 }

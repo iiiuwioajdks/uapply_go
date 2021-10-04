@@ -10,6 +10,7 @@ import (
 	"uapply_go/logger"
 	"uapply_go/middleware/auth"
 	"uapply_go/middleware/cors"
+	"uapply_go/middleware/wxauth"
 
 	gs "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
@@ -54,6 +55,8 @@ func SetRouter() *gin.Engine {
 	{
 		// 小程序登录
 		wx.GET("/login", wxController.Login1)
+		// 使用中间件
+		wx.Use(wxauth.Wx1JWTAuthMiddleware())
 	}
 
 	return r

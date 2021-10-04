@@ -1,4 +1,4 @@
-package auth
+package wxauth
 
 import (
 	"github.com/gin-gonic/gin"
@@ -8,11 +8,15 @@ import (
 	"uapply_go/response"
 )
 
-const OrganizationIdKey = "organization_id"
-const DepartmentIdKey = "department_id"
+/*
+微信小程序登录 token认证中间件
+*/
 
-// JWTAuthMiddleware JWT-based certified middleware
-func JWTAuthMiddleware() func(c *gin.Context) {
+const OpenIDKey = "openid"
+const SessionIDKey = "session_id"
+
+// Wx1JWTAuthMiddleware JWT-based certified middleware
+func Wx1JWTAuthMiddleware() func(c *gin.Context) {
 	return func(c *gin.Context) {
 		// 客户端携带Token有三种方式 1.放在请求头 2.放在请求体 3.放在URI
 		// 这里假设Token放在Header的Authorization中，并使用Bearer开头
@@ -32,17 +36,16 @@ func JWTAuthMiddleware() func(c *gin.Context) {
 		}
 		// parts[1] is the acquired tokenString,
 		//and we use the previously defined function to parse JWT to parse it
-		mc, err := jwt.ParseToken(parts[1])
+		ms, err := jwt.ParseToken2(parts[1])
 		if err != nil {
 			response.Fail(c, http.StatusUnauthorized, response.CodeTokenInvalid)
 			c.Abort()
 			return
 		}
 		// Save the currently requested message information to the requested context c
-		c.Set(OrganizationIdKey, mc.OrganizationID)
-		c.Set(DepartmentIdKey, mc.DepartmentID)
-		// Subsequent handlers can use c.Get(OrganizationIdKey) gets the organization
-		// and department information that is currently requested
+		c.Set(OpenIDKey, ms.OpenID)
+		c.Set(SessionIDKey, ms.SessionKey)
+		// 需要用到 openid的时候直接拿就行了
 		c.Next()
 	}
 }

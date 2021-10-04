@@ -9,6 +9,7 @@ const (
 	CodeParamsFalse
 	CodeSystemBusy
 	CodeNotRoot
+	CodeTokenInvalid
 )
 
 var codeMsgMap = map[ResCode]string{
@@ -17,6 +18,7 @@ var codeMsgMap = map[ResCode]string{
 	CodeParamsFalse:   "The account number or password is incorrect",
 	CodeSystemBusy:    "The system is busy",
 	CodeNotRoot:       "have not right",
+	CodeTokenInvalid:  "token is invalid",
 }
 
 func (c ResCode) Msg() string {

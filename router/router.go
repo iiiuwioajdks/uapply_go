@@ -57,6 +57,8 @@ func SetRouter() *gin.Engine {
 		wx.GET("/login", wxController.Login1)
 		// 使用中间件
 		wx.Use(wxauth.Wx1JWTAuthMiddleware())
+		// 获取主页信息
+		wx.GET("/message", wxController.GetMessage1)
 	}
 
 	return r

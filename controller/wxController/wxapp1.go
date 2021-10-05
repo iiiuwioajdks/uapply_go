@@ -1,11 +1,14 @@
 package wxController
 
 import (
+	"database/sql"
 	"github.com/gin-gonic/gin"
+	"github.com/pkg/errors"
 	"go.uber.org/zap"
 	"log"
 	"net/http"
 	"uapply_go/logic/wxLogic"
+	"uapply_go/middleware/wxauth"
 	"uapply_go/response"
 )
 
@@ -33,4 +36,25 @@ func Login1(c *gin.Context) {
 		return
 	}
 	response.Success(c, token)
+}
+
+func GetMessage1(c *gin.Context) {
+	oid, ok := c.Get(wxauth.OpenIDKey)
+	if !ok {
+		zap.L().Error("wxapp1 login error", zap.Error(errors.New("获取oid失败")))
+		log.Println(errors.New("获取oid失败"))
+		response.Fail(c, http.StatusInternalServerError, response.CodeSystemBusy)
+		return
+	}
+
+	wsm, err := wxLogic.GetMessage1(oid.(string))
+	if err != nil {
+		if err != sql.ErrNoRows {
+			zap.L().Error("wxapp1 login error", zap.Error(err))
+			log.Println(err)
+			response.Fail(c, http.StatusInternalServerError, response.CodeSystemBusy)
+			return
+		}
+	}
+	response.Success(c, wsm)
 }

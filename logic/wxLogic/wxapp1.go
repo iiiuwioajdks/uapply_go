@@ -8,6 +8,8 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"uapply_go/dao/mysql"
+	"uapply_go/entity/DBModels"
 	"uapply_go/entity/ResponseModels"
 	"uapply_go/pkg/jwt"
 )
@@ -49,4 +51,8 @@ func Wxapp1Login(code string) (string, error) {
 		return "", err
 	}
 	return token, nil
+}
+
+func GetMessage1(oid string) (*DBModels.StuMessage1, error) {
+	return mysql.GetMessage1(oid)
 }

@@ -2,20 +2,20 @@ app:
   port: "9090"
 
 mysql:
-  host: "121.40.193.220"
+  host: ""
   port: 3307
   user: "root"
   password: "root"
   dbname: "uapply"
 
 redis:
-  host: "121.40.193.220"
+  host: ""
   port: 6379
   db: 4
   auth: "lmx15521144359"
 
 memecache:
-  host: "121.40.193.220"
+  host: ""
   port: 11212
 
 log:
@@ -26,6 +26,3 @@ log:
   max_backups: 7
   mode: "dev"
 
-wx:
-  appID: wx6ab0a31c31778854
-  secret: e4ef19dfb4d4bf65d67be5a406eb1d74
